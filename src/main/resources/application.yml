@@ -1,0 +1,20 @@
+server:
+  port: 9000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: gateway-service
+#自定义路由规则
+zuul:
+  routes:
+    adjustment-service: /gateway/adjustment/**
+    case-service: /gateway/case/**
+    employee-service: /gateway/employee/**
+    finance-service: /gateway/finance/**
+    fixed_loss-service: /gateway/fixed_loss/**
+    schedule-service: /gateway/schedule/**
+  ignored-patterns: /*-service/**
+  sensitive-headers:
