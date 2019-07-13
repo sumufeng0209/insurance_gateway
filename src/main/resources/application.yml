@@ -14,7 +14,9 @@ zuul:
     case-service: /gateway/case/**
     employee-service: /gateway/employee/**
     finance-service: /gateway/finance/**
-    fixed_loss-service: /gateway/fixed_loss/**
+    fixed-loss-service: /gateway/fixed-loss/**
     schedule-service: /gateway/schedule/**
+    order-service: /gateway/order/**
+    document-service: /gateway/document/**
   ignored-patterns: /*-service/**
   sensitive-headers:
