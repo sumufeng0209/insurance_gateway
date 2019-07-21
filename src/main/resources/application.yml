@@ -7,6 +7,15 @@ eureka:
 spring:
   application:
     name: gateway-service
+  redis:
+    host: 192.168.174.128
+    port: 6379
+    jedis:
+      pool:
+        max-active: 1000
+        max-idle: 100
+        min-idle: 10
+        max-wait: 10000
 #自定义路由规则
 zuul:
   routes:

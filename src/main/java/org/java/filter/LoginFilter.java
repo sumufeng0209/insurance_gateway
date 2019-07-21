@@ -5,7 +5,11 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SERVLET_DETECTION_FILTER_ORDER;
@@ -38,7 +42,21 @@ public class LoginFilter extends ZuulFilter {
      */
     @Override
     public boolean shouldFilter() {
-        return true;//默认所有请求都进入过滤器
+        //获得请求上下文
+        RequestContext context = RequestContext.getCurrentContext();
+        
+        //通过请求上下文获得请求
+        HttpServletRequest request = context.getRequest();
+
+        //获得请求地址
+        String uri = request.getRequestURI();
+
+        //判断哪些请求不拦截直接放行
+        if(uri.startsWith("/gateway/employee/assets") || uri.startsWith("/gateway/employee/login") || uri.startsWith("/gateway/employee/forwardLogin")){
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -48,7 +66,30 @@ public class LoginFilter extends ZuulFilter {
      */
     @Override
     public Object run() throws ZuulException {
+        //获得上下文
+        RequestContext context = RequestContext.getCurrentContext();
+        
+        //获得请求
+        HttpServletRequest request = context.getRequest();
 
-        return null;
+        //获得响应
+        HttpServletResponse response = context.getResponse();
+
+        //获得会话
+        HttpSession session = request.getSession();
+
+        //判断用户是否登陆
+        Map<String,Object> emp = (Map<String, Object>) session.getAttribute("emp");
+        if(emp==null){
+            //跳转到登陆页面
+            try {
+                response.sendRedirect("http://localhost:9000/gateway/employee/forwardLogin");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }else{
+            return null;
+        }
     }
 }
