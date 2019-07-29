@@ -52,7 +52,13 @@ public class LoginFilter extends ZuulFilter {
         String uri = request.getRequestURI();
 
         //判断哪些请求不拦截直接放行
-        if(uri.startsWith("/gateway/employee/assets") || uri.startsWith("/gateway/employee/login") || uri.startsWith("/gateway/employee/forwardLogin")){
+        if(
+                uri.startsWith("/gateway/employee/assets") ||
+                uri.startsWith("/gateway/employee/login") ||
+                uri.startsWith("/gateway/employee/forwardLogin") ||
+                uri.endsWith(".js") ||
+                uri.endsWith(".css")
+        ){
             return false;
         }
 
